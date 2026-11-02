@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galvanise Demo</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light;
+--bg:#f4f1ea;--card:#fff;--text:#14213d;--muted:#5b6475;--line:#e0dccf;--accent:#c4620a;--ok:#1d7a4d;--warn:#b45309;--chip:#efe9dc}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#10151f;--card:#18202e;--text:#eef0f5;--muted:#9aa4b5;--line:#2a3547;--accent:#f28c28;--ok:#4cc38a;--warn:#f0b15a;--chip:#222c3d}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#10151f;--card:#18202e;--text:#eef0f5;--muted:#9aa4b5;--line:#2a3547;--accent:#f28c28;--ok:#4cc38a;--warn:#f0b15a;--chip:#222c3d}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.4}
+header{padding:20px 24px 0;max-width:1200px;margin:0 auto}
+h1{font-size:24px;margin:0}header p{margin:4px 0 0;color:var(--muted);font-size:14px}
+main{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:24px;padding:20px 24px 40px;max-width:1200px;margin:0 auto}
+@media(max-width:860px){main{grid-template-columns:minmax(0,1fr)}}
+.label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.phone{background:#0e1621;border-radius:24px;border:1px solid var(--line);overflow:hidden;display:flex;flex-direction:column;height:680px}
+.top{background:#17212b;color:#e8edf3;padding:12px 16px;font-weight:600;font-size:15px;border-bottom:1px solid #0e1621}
+.top small{display:block;font-weight:400;color:#7f91a4;font-size:12px}
+.chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:6px}
+.m{max-width:92%;align-self:flex-start}
+.m.me{align-self:flex-end}
+.b{background:#182533;color:#e8edf3;padding:8px 12px;border-radius:14px;font-size:14px;white-space:pre-line}
+.me .b{background:#2b5278}
+.t{font-size:11px;color:#6d7f92;text-align:right;margin-top:2px}
+.btns{display:flex;flex-direction:column;gap:3px;margin-top:3px}
+.btn{background:#1f2e3d;color:#e8edf3;border:0;border-radius:10px;padding:9px 10px;font:600 14px Inter,system-ui,sans-serif;cursor:pointer;text-align:center}
+.btn:hover{background:#2a3e52}.btn.on{background:#2b5278}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th{font-size:12px;text-align:left;color:var(--muted);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--chip)}
+.full{color:var(--ok)}.open{color:var(--warn)}
+.you{color:var(--accent);font-weight:700}
+.inv{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px;border:1px dashed var(--accent);border-radius:10px;margin-top:8px;font-size:14px}
+.inv button,.mini{font:600 13px Inter,system-ui,sans-serif;border:1px solid var(--line);background:var(--chip);color:var(--text);border-radius:8px;padding:6px 10px;cursor:pointer}
+.vols{display:flex;flex-wrap:wrap;gap:8px;font-size:13px}.vols span{background:var(--chip);border-radius:8px;padding:6px 10px}
+ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted)}li{margin:2px 0}
+.frm{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px;font-size:14px}
+.frm select,.frm input{font:14px Inter,system-ui,sans-serif;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--text)}
+.chip{display:inline-block;background:var(--chip);border:1px solid transparent;border-radius:8px;padding:5px 10px;margin:3px 6px 3px 0;font:13px Inter,system-ui,sans-serif;color:var(--text);cursor:pointer}
+.chip.on{border-color:var(--ok);color:var(--ok);font-weight:700}
+.chip.pend{border:1px dashed var(--warn)}
+.note{color:var(--muted);font-size:13px;margin:6px 0}
+#elig>div,#att>div{margin:8px 0;font-size:14px}
+</style>
+</head>
+<body>
+<header><h1>Galvanise demo</h1><p>Volunteer view on the left, coordinator view on the right. Everything here is sample data and runs only in your browser.</p></header>
+<main>
+<section><p class="label">Volunteer · Telegram bot</p><div class="phone"><div class="top">Galvanise Bot<small>bot · demo</small></div><div class="chat" id="chat" aria-live="polite"></div></div></section>
+<section id="agency"><p class="label">Coordinator · Dashboard</p>
+<div class="card"><b>Shifts and roster</b><div class="scroll"><table><thead><tr><th>Shift</th><th>When</th><th>Needs</th><th>Roster</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table></div><div id="invites"></div></div>
+<div class="card"><b>Volunteer availability</b><div class="vols" id="vols" style="margin-top:8px"></div></div>
+<div class="card"><b>Create a shift</b><div class="frm"><select id="fa" aria-label="Activity"><option value="b">Befriending visit</option><option value="f">Food distribution</option></select><select id="fs" aria-label="Time slot"></select><label>Volunteers needed <input id="fn" type="number" min="1" max="10" value="2" style="width:64px"></label><button class="mini" onclick="addShift()">Create shift</button></div><p class="note">The activity sets the eligibility tag. Galvanise invites matching volunteers automatically.</p></div>
+<div class="card"><b>Eligibility tags</b><p class="note">Staff verify and approve tags before a volunteer is matched to a role that needs them.</p><div id="elig"></div></div>
+<div class="card"><b>Attendance and certificates</b><p class="note">Tap a name to mark attendance, then generate certificates.</p><div id="att"></div><button class="mini" onclick="certs()">Generate certificates</button><div id="cert" style="margin-top:8px"></div></div>
+<div class="card"><b>Automated messages and engagement</b><div class="frm"><button class="mini" onclick="msg('rem')">Send shift reminder</button><button class="mini" onclick="msg('av')">Send monthly availability reminder</button><button class="mini" onclick="msg('thx')">Send appreciation message</button><button class="mini" onclick="msg('mil')">Send milestone message</button><button class="mini" onclick="msg('set')">Set impact update reminder</button><button class="mini" onclick="msg('imp')">Send impact update</button></div><p class="note">Messages that reach the volunteer appear in the chat on the left.</p></div>
+<div class="card"><b>Activity</b><ul id="log" style="margin-top:8px"></ul></div></section>
+</main>
+<script>
+var SLOTS={d7am:"07 Nov, morning",d7pm:"07 Nov, afternoon",d8am:"08 Nov, morning",d8pm:"08 Nov, afternoon"};
+var SH={s1:{t:"Befriending visit",w:"07 Nov 2026, 09:00 to 11:00",a:"b",req:"Befriending",slot:"d7am",need:2},
+s2:{t:"Food distribution",w:"07 Nov 2026, 14:00 to 16:00",a:"f",req:"Food handling",slot:"d7pm",need:2},
+s3:{t:"Befriending visit",w:"08 Nov 2026, 10:00 to 12:00",a:"b",req:"Befriending",slot:"d8am",need:2},
+s4:{t:"Food distribution",w:"08 Nov 2026, 14:00 to 16:00",a:"f",req:"Food handling",slot:"d8pm",need:2}};
+var POOL=[{n:"Sam",slots:["d7pm","d8am","d8pm"],tags:["Befriending","Food handling"]},{n:"Lina",slots:["d7am"],tags:["Befriending"]},{n:"Ken",slots:["d8am","d8pm"],tags:["Befriending","Food handling"]},{n:"Ravi",slots:["d7pm","d8pm"],tags:["Befriending"],pend:["Food handling"]}];
+var st;
+function reset(){st={av:[],ro:{s1:["You","Mei"],s2:["You","Raj"],s3:["Hana"],s4:["Raj"]},inv:{},att:{},certs:[],log:["Demo started. Rosters loaded."]};Object.keys(SH).forEach(function(k){if(["s1","s2","s3","s4"].indexOf(k)<0)delete SH[k]});POOL.forEach(function(p){if(p.n==="Ravi"){p.tags=["Befriending"];p.pend=["Food handling"]}});}
+var chat=document.getElementById("chat");
+function now(){return new Date().toLocaleTimeString("en-SG",{hour:"numeric",minute:"2-digit"})}
+function say(text,btns,me,cols){var m=document.createElement("div");m.className="m"+(me?" me":"");
+var b=document.createElement("div");b.className="b";b.textContent=text;m.appendChild(b);
+var t=document.createElement("div");t.className="t";t.textContent=now();m.appendChild(t);
+if(btns&&btns.length){var w=document.createElement("div");w.className="btns";
+btns.forEach(function(x){var e=document.createElement("button");e.className="btn"+(x[2]?" on":"");e.textContent=x[0];e.onclick=function(){say(x[0],null,true);setTimeout(x[1],250)};w.appendChild(e)});m.appendChild(w)}
+chat.appendChild(m);chat.scrollTop=chat.scrollHeight}
+function menu(){say("DEMO · volunteer view\nOnly sample data appears here. Times use Asia/Singapore.",[["My shifts",myShifts],["Share availability",shareAv],["Find suitable shifts",find],["Try agency view",agency],["How to test",how],["Start demo again",restart],["Exit demo",exit]])}
+function mine(){return Object.keys(SH).filter(function(k){return st.ro[k].indexOf("You")>-1})}
+function myShifts(){var l=mine();if(!l.length){say("You have no confirmed shifts.",[["Find suitable shifts",find],["Back to menu",menu]]);return}
+l.forEach(function(k){say("Demo · "+SH[k].t+"\n"+SH[k].w+"\nStatus in bot: confirmed",[["Cancel only",function(){cancel(k)}],["Reschedule",function(){resch(k)}]])});
+say("Choose an action on a shift above.",[["Back to menu",menu]])}
+function cancel(k){if(st.ro[k].indexOf("You")<0){say("That shift is no longer on your list.",[["Back to menu",menu]]);return}
+drop(k);say("Cancelled. The coordinator has been notified and replacements are being invited. Check the dashboard.",[["Try agency view",agency],["Back to menu",menu]])}
+function drop(k){st.ro[k]=st.ro[k].filter(function(n){return n!=="You"});st.log.unshift("You withdrew from "+SH[k].t+", "+SH[k].w+".");invite(k);draw()}
+function invite(k){var tr=(st.inv[k]||{}).tried||[];var c=POOL.filter(function(p){return p.slots.indexOf(SH[k].slot)>-1&&p.tags.indexOf(SH[k].req)>-1&&st.ro[k].indexOf(p.n)<0&&tr.indexOf(p.n)<0})[0];
+if(c){st.inv[k]={name:c.n,tried:tr};st.log.unshift("Invited "+c.n+" (availability and “"+SH[k].req+"” tag match).")}
+else{delete st.inv[k];st.log.unshift("No eligible volunteer free for this vacancy. Coordinator alerted.")}}
+function resch(k){var alt=Object.keys(SH).filter(function(j){return j!==k&&SH[j].a===SH[k].a&&st.ro[j].indexOf("You")<0&&st.ro[j].length<SH[j].need});
+if(!alt.length){say("No other shift for this activity has space right now.",[["Cancel only",function(){cancel(k)}],["Keep my booking",menu]]);return}
+say("Choose another shift for the same activity. Your current booking stays held until you confirm a replacement.",alt.map(function(j){return["Demo · "+SH[j].t+" — "+SH[j].w,function(){conf(k,j)}]}).concat([["Keep my booking",menu]]))}
+function conf(k,j){say("Confirm moving to:\nDemo · "+SH[j].t+" — "+SH[j].w,[["Confirm",function(){st.ro[j].push("You");st.log.unshift("You moved from "+SH[k].w+" to "+SH[j].w+".");drop2(k);say("Done. You are now confirmed for "+SH[j].w+".",[["My shifts",myShifts],["Back to menu",menu]])}],["Back",function(){resch(k)}]])}
+function drop2(k){st.ro[k]=st.ro[k].filter(function(n){return n!=="You"});invite(k);draw()}
+function shareAv(){var w=Object.keys(SLOTS).map(function(s){return[(st.av.indexOf(s)>-1?"✓ ":"")+SLOTS[s],function(){tog(s)},st.av.indexOf(s)>-1]});
+say("Tap the times you are free. Tap again to remove.",w.concat([["Save availability",function(){st.log.unshift("You shared availability: "+(st.av.map(function(s){return SLOTS[s]}).join("; ")||"none")+".");draw();say("Saved. "+(st.av.length?"Tap Find suitable shifts to see matches.":"No times selected."),[["Find suitable shifts",find],["Back to menu",menu]])}]]))}
+function tog(s){var i=st.av.indexOf(s);if(i>-1)st.av.splice(i,1);else st.av.push(s);shareAv()}
+function find(){var l=Object.keys(SH).filter(function(k){return st.av.indexOf(SH[k].slot)>-1&&st.ro[k].indexOf("You")<0&&st.ro[k].length<SH[k].need});
+if(!st.av.length){say("Share your availability first so I can match shifts.",[["Share availability",shareAv],["Back to menu",menu]]);return}
+if(!l.length){say("No open shifts match your availability yet.",[["Share availability",shareAv],["Back to menu",menu]]);return}
+say("These open shifts match your availability:",l.map(function(k){return[SH[k].t+" — "+SH[k].w,function(){reg(k)}]}).concat([["Back to menu",menu]]))}
+function reg(k){st.ro[k].push("You");st.log.unshift("You registered for "+SH[k].t+", "+SH[k].w+".");draw();
+say("Registered for "+SH[k].t+", "+SH[k].w+".\nGoing with a friend?",[["Add a friend",function(){friend(k)}],["No, thanks",menu]])}
+function friend(k){if(st.ro[k].length>=SH[k].need){say("This shift has no space left for a friend.",[["Back to menu",menu]]);return}
+st.ro[k].push("Jia");st.log.unshift("Jia (friend of You) registered for "+SH[k].t+". Each person confirms individually.");draw();
+say("Jia is registered with Galvanise and has been added. Each person confirms their own participation.",[["Back to menu",menu]])}
+function agency(){say("The coordinator dashboard is shown alongside this chat. Cancel a shift here and watch the vacancy and invitation appear.",[["Back to menu",menu]]);document.getElementById("agency").scrollIntoView({behavior:"smooth"})}
+function how(){say("Try this:\n1. My shifts → Cancel only\n2. On the dashboard, accept or decline the invitation\n3. My shifts → Reschedule, pick the replacement and confirm\n4. Share availability → Find suitable shifts → Add a friend",[["Back to menu",menu]])}
+function restart(){reset();chat.innerHTML="";draw();menu()}
+function exit(){say("Demo ended. Tap below to try again.",[["Start demo again",restart]])}
+function draw(){var r=document.getElementById("rows");r.innerHTML="";
+Object.keys(SH).forEach(function(k){var s=SH[k],f=st.ro[k].length,tr=document.createElement("tr");
+var td=function(x){var c=document.createElement("td");if(typeof x==="string")c.textContent=x;else c.appendChild(x);tr.appendChild(c);return c};
+td(s.t+" (needs "+s.req+")");td(s.w);td(f+" / "+s.need);
+var ro=document.createElement("span");st.ro[k].forEach(function(n,i){var e=document.createElement("span");e.textContent=n;if(n==="You")e.className="you";ro.appendChild(e);if(i<st.ro[k].length-1)ro.appendChild(document.createTextNode(", "))});if(!f)ro.textContent="No one yet";td(ro);
+var b=document.createElement("span");b.className="badge "+(f>=s.need?"full":"open");b.textContent=f>=s.need?"Full":st.inv[k]?"Invitation sent":"Vacancy";td(b);r.appendChild(tr)});
+var iv=document.getElementById("invites");iv.innerHTML="";
+Object.keys(st.inv).forEach(function(k){var d=document.createElement("div");d.className="inv";var p=document.createElement("span");p.textContent="Invited "+st.inv[k].name+" for "+SH[k].t+", "+SH[k].w+".";d.appendChild(p);
+var a=document.createElement("button");a.textContent="Simulate: "+st.inv[k].name+" accepts";a.onclick=function(){var n=st.inv[k].name;st.ro[k].push(n);delete st.inv[k];st.log.unshift(n+" confirmed. Roster updated.");draw()};
+var c=document.createElement("button");c.textContent="Simulate: declines";c.onclick=function(){invite(k);draw()};d.appendChild(a);d.appendChild(c);iv.appendChild(d)});
+var v=document.getElementById("vols");v.innerHTML="";var y=document.createElement("span");y.textContent="You: "+(st.av.map(function(s){return SLOTS[s]}).join("; ")||"not shared yet");v.appendChild(y);
+POOL.forEach(function(p){var e=document.createElement("span");e.textContent=p.n+": "+p.slots.map(function(s){return SLOTS[s]}).join("; ");v.appendChild(e)});
+extra();var l=document.getElementById("log");l.innerHTML="";st.log.slice(0,6).forEach(function(x){var li=document.createElement("li");li.textContent=x;l.appendChild(li)})}
+var TIMES={d7am:"07 Nov 2026, 09:00 to 11:00",d7pm:"07 Nov 2026, 14:00 to 16:00",d8am:"08 Nov 2026, 10:00 to 12:00",d8pm:"08 Nov 2026, 14:00 to 16:00"};
+function $(i){return document.getElementById(i)}
+function mk(tag,txt,cls,fn){var e=document.createElement(tag);if(txt)e.textContent=txt;if(cls)e.className=cls;if(fn)e.onclick=fn;return e}
+$("fs").innerHTML="";Object.keys(TIMES).forEach(function(k){var o=mk("option",TIMES[k]);o.value=k;$("fs").appendChild(o)});
+function addShift(){var a=$("fa").value,sl=$("fs").value,n=Math.max(1,Math.min(10,+$("fn").value||2)),id="s"+(Object.keys(SH).length+1);
+SH[id]={t:a==="b"?"Befriending visit":"Food distribution",w:TIMES[sl],a:a,req:a==="b"?"Befriending":"Food handling",slot:sl,need:n};st.ro[id]=[];
+st.log.unshift("Created "+SH[id].t+", "+SH[id].w+" (needs "+n+").");invite(id);draw();
+if(st.av.indexOf(sl)>-1)say("A new shift matches your availability: "+SH[id].t+", "+SH[id].w+".",[["Find suitable shifts",find],["Back to menu",menu]])}
+function extra(){var e=$("elig");e.innerHTML="";POOL.forEach(function(p){var r=mk("div");r.appendChild(mk("b",p.n+": "));p.tags.forEach(function(t){r.appendChild(mk("span","✓ "+t,"chip on"))});(p.pend||[]).forEach(function(t){r.appendChild(mk("button","Approve “"+t+"”","chip pend",function(){p.pend=p.pend.filter(function(x){return x!==t});p.tags.push(t);st.log.unshift("Approved “"+t+"” for "+p.n+". They can now be matched to shifts that need it.");draw()}))});e.appendChild(r)});
+var a=$("att");a.innerHTML="";Object.keys(SH).forEach(function(k){if(!st.ro[k].length)return;var r=mk("div");r.appendChild(mk("b",SH[k].t+", "+SH[k].w));r.appendChild(mk("br"));st.ro[k].forEach(function(n){var on=st.att[k+n];r.appendChild(mk("button",(on?"✓ ":"")+n,"chip"+(on?" on":""),function(){st.att[k+n]=!on;draw()}))});a.appendChild(r)});
+var c=$("cert");c.innerHTML="";st.certs.forEach(function(x){c.appendChild(mk("div","Certificate: "+x,"note"))})}
+function certs(){var n=0;Object.keys(SH).forEach(function(k){st.ro[k].forEach(function(p){if(st.att[k+p]){var x=p+" · "+SH[k].t+", "+SH[k].w;if(st.certs.indexOf(x)<0){st.certs.push(x);n++;if(p==="You")say("Your certificate is ready: "+SH[k].t+", "+SH[k].w+".",[["Back to menu",menu]])}}})});st.log.unshift(n?"Generated "+n+" certificate(s) automatically.":"No new attendance to certify. Mark attendance first.");draw()}
+function msg(t){var k=mine()[0];
+if(t==="rem"){st.log.unshift("Sent shift reminders to confirmed volunteers.");if(k)say("Reminder: you have "+SH[k].t+" on "+SH[k].w+".",[["My shifts",myShifts],["Back to menu",menu]])}
+if(t==="av"){st.log.unshift("Sent monthly availability reminder.");say("Monthly check: is your availability still up to date?",[["Share availability",shareAv],["Back to menu",menu]])}
+if(t==="thx"){st.log.unshift("Sent appreciation message to volunteers.");say("Thank you for volunteering with us. Your time makes a real difference.",[["Back to menu",menu]])}
+if(t==="mil"){var h=Object.keys(SH).filter(function(j){return st.att[j+"You"]}).length*2;if(h){st.log.unshift("Sent milestone message ("+h+" hours).");say("Milestone: you have contributed "+h+" volunteer hours. Thank you!",[["Back to menu",menu]])}else st.log.unshift("No milestone yet. Mark attendance first.")}
+if(t==="set")st.log.unshift("Reminder set: in one week, send a photo update showing the impact of volunteers’ work.");
+if(t==="imp"){st.log.unshift("Sent impact update to volunteers.");say("Impact update: your recent shifts helped serve our community this week. Here is a photo from the day.",[["Back to menu",menu]])}
+draw()}
+reset();draw();menu();
+</script>
+</body>
+</html>
